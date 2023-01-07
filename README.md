@@ -2,4 +2,4 @@
 
 Hier kommt eine tolle Beschreibung rein...
 
-Hier nohc ein Text
+Hier noch ein Text
