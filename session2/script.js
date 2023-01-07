@@ -1,13 +1,12 @@
 let obj = {
     //first_name, last_name ...
-    first_name:"Sabine",
-    last_name: "Classnitz",
-
+    first_name: "Johann",
+    last_name: "Mühlbach",
     sayHello() {
-        console.log(this.first_name + this.last_name);
+        console.log(this.first_name);
     }
- }
- 
- console.log(obj);
- console.log(obj.first_name); // undefined
- obj.sayHello();
+}
+
+console.log(obj);
+console.log(obj.first_name);
+obj.sayHello();
