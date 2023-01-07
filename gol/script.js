@@ -2,81 +2,109 @@ let matrix = [
     [0, 0, 1, 0, 0],
     [1, 0, 0, 0, 0],
     [0, 1, 0, 0, 0],
-    [0, 0, 1, 0, 0],
+    [0, 0, 1, 3, 0],
     [1, 1, 0, 0, 0],
     [1, 1, 0, 2, 0],
     [1, 1, 0, 0, 0]
- ];
+];
 
-let side = 20;
-let fr = 4;
 
-//Liste der Lebewesen
+let fr = 3;
+let side = 10;
+
+// 
 let grassArr = [];
 let grazerArr = [];
 let predArr = [];
 
-function getRandMatrix(b, h){
+// Funktionen definieren
+function getRandomMatrix(width, height) {
+    // erstellt matrix
     let matrix = [];
-    for(let y = 0; y < h; y++){
-        matrix[y] = [];
-        for(let x = 0; x < b; x++){
-            matrix[y][x] = Math.round(random(0,1));  
+    // weitere Arrays erstellen
+    for (let y = 0; y < height; y++) {
+        // leeres Array in die Matrix speichern
+        matrix.push([]);
+        // jedes dieser Array - werte rein speichern
+        for (let x = 0; x < width; x++) {
+            matrix[y][x] = Math.floor(Math.random() * 2);
         }
     }
     return matrix;
 }
 
-function setup(){
-    // matrix = getRandMatrix(10,15);
-    // matrix[12][8] = 2;
-    createCanvas(side*matrix[0].length+1, side * matrix.length+1);
+function createMoreCreatures() {
+    // Grasfresser und Fleischfresser
+    for (let y = 0; y < matrix.length; y++) {
+        for (let x = 0; x < matrix[y].length; x++) {
+            if (x == y) {
+                matrix[y][x] = 2;
+                if(y+2 < matrix.length && x+2 < matrix[0].length)
+                matrix[y+2][x+2] = 2;
+            }
+            if(x+y == matrix.length-1){
+                matrix[y][x] = 3;
+            }
+        }
+    }
+}
+
+// einmal bei Programmstart
+function setup() {
+    matrix = getRandomMatrix(50, 50);
+    createMoreCreatures();
+
+    createCanvas(matrix[0].length * side + 1, matrix.length * side + 1);
     background('#acacac');
     frameRate(fr);
-  
-    for(let y = 0; y < matrix.length; y++){
-        for(let x = 0; x < matrix[y].length; x++){
-            if(matrix[y][x] == 1){
-                let grasObj = new Grass(x, y);
-                grassArr.push(grasObj);
-            }else if(matrix[y][x] == 2){
-                let grasfresser = new Grazer(x,y);
-                grazerArr.push(grasfresser);
+
+    for (let y = 0; y < matrix.length; y++) {
+        for (let x = 0; x < matrix[y].length; x++) {
+            if (matrix[y][x] == 1) {
+                grassArr.push(new Grass(x, y));
+            } else if (matrix[y][x] == 2) {
+                grazerArr.push(new Grazer(x, y));
+            }
+            else if (matrix[y][x] == 3) {
+                predArr.push(new Predator(x, y));
             }
         }
     }
-    
 
- }
+}
 
- function draw(){
-   
-    for(let i=0; i<grassArr.length; i++){
-        let grasObj= grassArr[i];
-        grasObj.mul(); 
+// wiederholend
+function draw() {
+
+    //update von Grass-Lebewesen
+    for (let i = 0; i < grassArr.length; i++) {
+        grassArr[i].mul();
     }
 
-    for(let i=0; i< grazerArr.length; i++){
-        let grasfresser = grazerArr[i];
-        grasfresser.eat();
-        grasfresser.mul();
+    for (let i = 0; i < grazerArr.length; i++) {
+        grazerArr[i].eat();
     }
 
-    for(let y = 0; y < matrix.length; y++){
-        for(let x = 0; x < matrix[y].length; x++){
-            matrix[y][x];
+    for (let i = 0; i < predArr.length; i++) {
+        predArr[i].eat();
+        
+    }
+
+    for (let y = 0; y < matrix.length; y++) {
+        for (let x = 0; x < matrix[y].length; x++) {
             fill('white');
-            if(matrix[y][x] == 1){
-                fill('green')
-            }else if(matrix[y][x] == 2){
-                fill('yellow')
-            }else if(matrix[y][x] == 3){
-                fill('red')
+            if (matrix[y][x] == 1) {
+                fill("#28764F")
+            } else if (matrix[y][x] == 2) {
+                fill('#DB960B')
+            } else if (matrix[y][x] == 3) {
+                fill('#961707')
             }
-            // zeichnen rect
-            rect(x*side,y*side,side,side);
+            rect(x * side, y * side, side, side);
         }
     }
 
 
- }
+
+}
+

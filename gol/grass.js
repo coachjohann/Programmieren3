@@ -1,22 +1,54 @@
-let LivingCreature = require("./livingCreature");
-const utils = require("./utils");
+class Grass {
+    constructor(x, y) {
+        // Farbe - grün
+        this.colorValue = 1;
+        // Position
+        this.x = x;
+        this.y = y;
+        // Sicht auf Nachbarfelder
+        this.neighbors = [
+            [this.x - 1, this.y - 1],
+            [this.x, this.y - 1],
+            [this.x + 1, this.y - 1],
+            [this.x - 1, this.y],
+            [this.x + 1, this.y],
+            [this.x - 1, this.y + 1],
+            [this.x, this.y + 1],
+            [this.x + 1, this.y + 1]
+        ];
+        this.roundCount = 0;
+    }
 
-module.exports = class Grass extends LivingCreature{
+    findFields(symbol) {
+        let found = [];
+        for (let i = 0; i < this.neighbors.length; i++) {
+            const pos = this.neighbors[i]; // [x, y]
+            let posX = pos[0];
+            let posY = pos[1];
+            if (posX >= 0 && posX < matrix[0].length &&
+                posY >= 0 && posY < matrix.length) {
+                if (matrix[posY][posX] == symbol) {
+                    found.push(pos);
+                }
+            }
 
-    mul(){
-        this.multiply++;
-        // wenn 5 Runden vorbei 
-        if(this.multiply >= 5){
-            let emptyFields = this.chooseFields(0);
-            if(emptyFields.length > 0){
-                let newPos = utils.getRandomElementFromArray(emptyFields);
+        }
+        return found;
+    }
+
+    mul() {
+        // counter > 6 , dann vermehren
+        this.roundCount++;
+        if (this.roundCount >= 6) {
+            let emptyFields = this.findFields(0);
+            if (emptyFields.length > 0) {
+                let newPos = random(emptyFields); // [x,y]
                 let newX = newPos[0];
                 let newY = newPos[1];
-                let grasObj = new Grass(newX, newY);
-                grassArr.push(grasObj);
-                matrix[newY][newX] = 1;
+                grassArr.push(new Grass(newX, newY));
+                matrix[newY][newX] = this.colorValue;
             }
-            this.multiply = 0;
+            this.roundCount = 0;
         }
     }
 }
