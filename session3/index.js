@@ -1,12 +1,16 @@
 const os = require('os');
-const Square = require('./module');
+const express = require('express');
 
-let message = "Das Betriebssystem ist ";
+const app = express();
 
-function main(){
-    console.log(message + os.platform());
-    let squareObj = new Square(10);
-    console.log("Fläche: ", squareObj.getArea());
-}
+let message = 'mein betriebsystem ist';
 
-main();
+app.get("/name/:name", function(req, res){
+    let name = req.params.name;
+    res.send("<h1>Hello " + name +"</h1>");
+ });
+ 
+
+app.listen(3000, function(){
+    console.log('i started');
+});
