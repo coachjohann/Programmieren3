@@ -1,7 +1,7 @@
 const findRandomPosFor = (obj, symbol) => {
     let fields = obj.findFields(symbol);
     if(fields.length > 0){
-        return random(fields);
+        return fields[Math.floor(Math.random()*fields.length)];
     }else{
         return undefined;
     }
@@ -16,3 +16,4 @@ const removeFromList = (obj, list) => {
     }
 }
 
+module.exports = {removeFromList, findRandomPosFor}

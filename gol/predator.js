@@ -1,4 +1,6 @@
-class Predator {
+const funktionen = require("./functions.js");
+
+module.exports = class Predator {
     constructor(x, y) {
         // Farbe - red
         this.colorValue = 3;
@@ -60,9 +62,9 @@ class Predator {
     eat() {
         let fields = this.findFields(2);
         if (fields.length > 0) {
-            let pos = random(fields);
+            let pos = fields[Math.floor(Math.random()*fields.length)];
             this.updateGameAndPos(pos[0], pos[1]);
-            removeFromList(this, grazerArr); // Grasfresser löschen
+            funktionen.removeFromList(this, grazerArr); // Grasfresser löschen
 
             this.eatCount++;
             this.notEaten = 0;
@@ -84,14 +86,14 @@ class Predator {
     move() {
         let emptyFields = this.findFields(0);
         if (emptyFields.length > 0) {
-            let pos = random(emptyFields);
+            let pos = emptyFields[Math.floor(Math.random()*emptyFields.length)];
             this.updateGameAndPos(pos[0], pos[1]);
         }
     }
 
     die() {
         matrix[this.y][this.x] = 0;
-        removeFromList(this, predArr);
+        funktionen.removeFromList(this, predArr);
     }
 
     mul() {
@@ -107,3 +109,4 @@ class Predator {
         }
     }
 }
+//export {Predator}
