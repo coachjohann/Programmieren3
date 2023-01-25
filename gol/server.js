@@ -2,6 +2,33 @@
 const Grass = require("./grass.js");
 const Grazer = require("./grazer.js");
 const Predator = require("./predator.js");
+const express = require('express');
+
+const app = express();
+
+app.use(express.static("../gol"));
+
+app.get("/", function(req, res){
+    
+    
+ });
+
+app.listen(3000, function(){
+    console.log('i started');
+    initGame();
+    setInterval(function (){
+        updateGame()
+    }, 1000);
+});
+
+app.get("/*/", function(req, res){
+    res.status(404).send('404 not found');
+ }); 
+
+
+
+
+
 
 
 matrix = [
@@ -115,12 +142,3 @@ function updateGame() {
 
 
 }
-
-
-
-
-initGame();
-
-setInterval(function (){
-    updateGame()
-}, 1000);
