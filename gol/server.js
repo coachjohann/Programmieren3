@@ -6,14 +6,34 @@ const express = require('express');
 
 const app = express();
 
-app.use(express.static("../gol"));
+let httpServer = require('http').Server(app);
+
+let {Server} = require('socket.io');
+const io = new Server(httpServer);
+
+app.use(express.static('./'));
+
+app.get('/', function(req, res){
+    res.redirect('index.html');
+});
+
+
+
+
+
 
 app.get("/", function(req, res){
     
-    
  });
 
-app.listen(3000, function(){
+io.on('connection', function(socket){
+    console.log('client gestartet auf port 3000');
+    io.emit('send matrix', matrix);
+
+})
+
+
+httpServer.listen(3000, function(){
     console.log('i started');
     initGame();
     setInterval(function (){
@@ -110,7 +130,8 @@ function initGame() {
 function updateGame() {
 
     //update von Grass-Lebewesen
-    console.log(matrix)
+    console.log('send matrix')
+    io.emit('send matrix', matrix);
 
     for (let i = 0; i < grassArr.length; i++) {
         grassArr[i].mul();
